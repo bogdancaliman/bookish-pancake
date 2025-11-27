@@ -53,11 +53,11 @@ const CoverImage = ({ src, alt }: { src?: string; alt: string }) => {
 };
 
 const Title = ({ children }: { children: ReactNode }) => {
-  return <h3 className="m-0 text-xl">{children}</h3>;
+  return <h3 className="m-0 text-2xl font-bold">{children}</h3>;
 };
 
 const DescriptionText = ({ text }: { text: string }) => (
-  <p className="m-0 leading-relaxed text-gray-600">{text}</p>
+  <p className="text-base m-0 leading-relaxed text-gray-600">{text}</p>
 );
 
 const EmptyState = ({ message }: { message: string }) => <span>{message}</span>;

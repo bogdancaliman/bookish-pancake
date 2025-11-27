@@ -10,7 +10,7 @@ function App() {
   return (
     <section className="font-sans max-w-[800px] mx-auto p-5">
       <header className="flex justify-between items-center mb-5">
-        <h1 className="text-2xl">Library Inventory</h1>
+        <h1 className="text-4xl">Library Inventory</h1>
         <button
           onClick={addBook}
           className="px-4 py-2 bg-blue-600 active:bg-blue-800 hover:bg-blue-700 text-white rounded cursor-pointer text-base"

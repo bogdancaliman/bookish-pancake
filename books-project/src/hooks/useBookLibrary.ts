@@ -12,8 +12,7 @@ export const useBookLibrary = (initalBooks: Book[]) => {
         Math.random() > 0.5
           ? "This is a new description for this book"
           : undefined,
-      imageUrl:
-        Math.random() > 0.5 ? "https://placehold.co/600x400" : "invalid-url",
+      imageUrl: Math.random() > 0.5 ? "https://cataas.com/cat" : "invalid-url",
     };
 
     setBooks((prev) => [...prev, newBook]);
