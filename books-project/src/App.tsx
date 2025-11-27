@@ -1,8 +1,9 @@
-import { useState, ReactNode } from "react";
+import { ReactNode } from "react";
 import "./App.css";
 import { PLACEHOLDER_IMAGE, INITIAL_DATA } from "./lib/books";
 import { useBookLibrary } from "./hooks/useBookLibrary";
 import { useToggle } from "./hooks/useToggle";
+import { useImageFallback } from "./hooks/useImageFallbacl";
 
 const Card = ({ children }: { children: ReactNode }) => {
   return <li className="flex border rounded-lg p-4 mb-4 gap-5">{children}</li>;
@@ -13,7 +14,7 @@ const CardColumn = ({ children }: { children: ReactNode }) => {
 };
 
 const CoverImage = ({ src, alt }: { src?: string; alt: string }) => {
-  const { hasError, onError } = useImageFallback(PLACEHOLDER_IMAGE);
+  const { hasError, onLoad, onError, showFallbackMessage } = useImageFallback();
   const finalSrc = !src || hasError ? PLACEHOLDER_IMAGE : src;
 
   return (
@@ -21,9 +22,15 @@ const CoverImage = ({ src, alt }: { src?: string; alt: string }) => {
       <img
         src={finalSrc}
         alt={alt}
+        onLoad={onLoad}
         onError={onError}
         className="w-[200px] h-[150px] object-cover rounded bg-stone-50"
       />
+      {showFallbackMessage && (
+        <span className="text-sm text-red-500 mt-1">
+          Image failed to load - showing placeholder
+        </span>
+      )}
     </div>
   );
 };
@@ -110,9 +117,3 @@ function App() {
 }
 
 export default App;
-function useImageFallback(PLACEHOLDER_IMAGE: string): {
-  hasError: any;
-  onError: any;
-} {
-  throw new Error("Function not implemented.");
-}

@@ -1,8 +1,19 @@
 import { useState } from "react";
 
-const useImageFallback = (fallbackUrl: string) => {
+export const useImageFallback = () => {
   const [hasError, setHasError] = useState(false);
-  const onError = () => setHasError(true);
+  const [loaded, setLoaded] = useState(false);
 
-  return { hasError, onError };
+  const onLoad = () => {
+    setLoaded(true);
+  };
+
+  const onError = () => {
+    setLoaded(true);
+    setHasError(true);
+  };
+
+  const showFallbackMessage = loaded && hasError;
+
+  return { hasError, loaded, onLoad, onError, showFallbackMessage };
 };
