@@ -22,7 +22,12 @@ function App() {
       <div className="flex flex-col gap-4">
         <ul>
           {books.map((book) => (
-            <BookCard key={book.id} book={book} />
+            <BookCard
+              key={book.id}
+              title={book.title}
+              description={book.description}
+              imageUrl={book.imageUrl}
+            />
           ))}
         </ul>
       </div>

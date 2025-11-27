@@ -1,18 +1,24 @@
-import type { ReactNode } from "react";
-import { PLACEHOLDER_IMAGE, type Book } from "../lib/books";
+import { useId, type ReactNode } from "react";
+import { PLACEHOLDER_IMAGE } from "../lib/books";
 import { useToggle } from "../hooks/useToggle";
 import { useImageFallback } from "../hooks/useImageFallback";
 
-export function BookCard({ book }: { book: Book }) {
-  const descId = `desc-${book.id}`;
+type BookCardProps = {
+  title: string;
+  description?: string;
+  imageUrl?: string;
+};
+
+export function BookCard({ title, description, imageUrl }: BookCardProps) {
+  const descId = useId();
   return (
-    <Card key={book.id}>
-      <CoverImage src={book.imageUrl} alt={`Cover of ${book.title}`} />
+    <Card>
+      <CoverImage src={imageUrl} alt={`Cover of ${title}`} />
       <CardColumn>
-        <Title>{book.title}</Title>
-        {book.description ? (
+        <Title>{title}</Title>
+        {description ? (
           <Collapsible labelId={descId}>
-            <DescriptionText text={book.description} />
+            <DescriptionText text={description} />
           </Collapsible>
         ) : (
           <EmptyState message="No description" />
