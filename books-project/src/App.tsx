@@ -1,35 +1,8 @@
 import { useState, ReactNode } from "react";
 import "./App.css";
-import type { Book } from "./lib/books";
 import { PLACEHOLDER_IMAGE, INITIAL_DATA } from "./lib/books";
-
-const useBookLibrary = (initalBooks: Book[]) => {
-  const [books, setBooks] = useState<Book[]>(initalBooks);
-
-  const addBook = () => {
-    const newBook: Book = {
-      id: Date.now().toString(),
-      title: `New Book ${books.length + 1}`,
-      description:
-        Math.random() > 0.5
-          ? "This is a new description for this book"
-          : undefined,
-      imageUrl:
-        Math.random() > 0.5 ? "https://placehold.co/600x400" : "invalid-url",
-    };
-
-    setBooks((prev) => [...prev, newBook]);
-  };
-
-  return { books, addBook };
-};
-
-const useImageFallback = (fallbackUrl: string) => {
-  const [hasError, setHasError] = useState(false);
-  const onError = () => setHasError(true);
-
-  return { hasError, onError };
-};
+import { useBookLibrary } from "./hooks/useBookLibrary";
+import { useToggle } from "./hooks/useToggle";
 
 const Card = ({ children }: { children: ReactNode }) => {
   return <li className="flex border rounded-lg p-4 mb-4 gap-5">{children}</li>;
@@ -64,13 +37,6 @@ const DescriptionText = ({ text }: { text: string }) => (
 );
 
 const EmptyState = ({ message }: { message: string }) => <span>{message}</span>;
-
-const useToggle = (initialState = false) => {
-  const [isOpen, setIsOpen] = useState(initialState);
-  const toogle = () => setIsOpen((prev) => !prev);
-
-  return { isOpen, toogle };
-};
 
 const Collapsible = ({
   children,
@@ -144,3 +110,9 @@ function App() {
 }
 
 export default App;
+function useImageFallback(PLACEHOLDER_IMAGE: string): {
+  hasError: any;
+  onError: any;
+} {
+  throw new Error("Function not implemented.");
+}
