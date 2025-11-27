@@ -1,33 +1,7 @@
 import { useState, ReactNode } from "react";
 import "./App.css";
-
-interface Book {
-  id: string;
-  title: string;
-  description?: string;
-  imageUrl?: string;
-}
-
-const PLACEHOLDER_IMAGE = "https://placehold.co/600x400";
-
-const INITIAL_DATA: Book[] = [
-  {
-    id: "1",
-    title: "Title ONE",
-    description: "The Title ONE book is an incredible book.",
-    imageUrl: "https://placehold.co/600x400",
-  },
-  {
-    id: "2",
-    title: "Title TWO",
-    description: "The Title TWO book is an incredible book.",
-  },
-  {
-    id: "3",
-    title: "Title THREE",
-    imageUrl: "https://placehold.co/600x400",
-  },
-];
+import type { Book } from "./lib/books";
+import { PLACEHOLDER_IMAGE, INITIAL_DATA } from "./lib/books";
 
 const useBookLibrary = (initalBooks: Book[]) => {
   const [books, setBooks] = useState<Book[]>(initalBooks);
@@ -70,8 +44,13 @@ const CoverImage = ({ src, alt }: { src?: string; alt: string }) => {
   const finalSrc = !src || hasError ? PLACEHOLDER_IMAGE : src;
 
   return (
-    <div>
-      <img src={finalSrc} alt={alt} onError={onError} />
+    <div className="shrink-0">
+      <img
+        src={finalSrc}
+        alt={alt}
+        onError={onError}
+        className="w-[200px] h-[150px] object-cover rounded bg-stone-50"
+      />
     </div>
   );
 };
@@ -106,7 +85,12 @@ const Collapsible = ({
 
   return (
     <div>
-      <button onClick={toogle} aria-expanded={isOpen} aria-controls={labelId}>
+      <button
+        className="flex items-center gap-1 bg-none border-none text-blue-600 p-0 cursor-pointer text-left text-sm "
+        onClick={toogle}
+        aria-expanded={isOpen}
+        aria-controls={labelId}
+      >
         {isOpen ? "Hide" : "Show"} Description
       </button>
       {isOpen && <div id={labelId}>{children}</div>}
@@ -118,44 +102,44 @@ function App() {
   const { books, addBook } = useBookLibrary(INITIAL_DATA);
 
   return (
-    <>
-      <section className="flex flex-col justify-center items-center">
-        <div>
-          <button
-            onClick={addBook}
-            className="px-4 py-2 bg-blue-600 active:bg-blue-800 hover:bg-blue-700 text-white rounded cursor-pointer text-base"
-          >
-            Add New Book
-          </button>
-        </div>
-        <div className="flex flex-col gap-4">
-          <ul>
-            {books.map((book) => {
-              const descId = `desc-${book.id}`;
+    <section className="font-sans max-w-[800px] mx-auto p-5">
+      <header className="flex justify-between items-center mb-5">
+        <h1 className="text-2xl">Library Inventory</h1>
+        <button
+          onClick={addBook}
+          className="px-4 py-2 bg-blue-600 active:bg-blue-800 hover:bg-blue-700 text-white rounded cursor-pointer text-base"
+        >
+          Add New Book
+        </button>
+      </header>
 
-              return (
-                <Card key={book.id}>
-                  <CoverImage
-                    src={book.imageUrl}
-                    alt={`Cover of ${book.title}`}
-                  />
-                  <CardColumn>
-                    <Title>{book.title}</Title>
-                    {book.description ? (
-                      <Collapsible labelId={descId}>
-                        <DescriptionText text={book.description} />
-                      </Collapsible>
-                    ) : (
-                      <EmptyState message="No description" />
-                    )}
-                  </CardColumn>
-                </Card>
-              );
-            })}
-          </ul>
-        </div>
-      </section>
-    </>
+      <div className="flex flex-col gap-4">
+        <ul>
+          {books.map((book) => {
+            const descId = `desc-${book.id}`;
+
+            return (
+              <Card key={book.id}>
+                <CoverImage
+                  src={book.imageUrl}
+                  alt={`Cover of ${book.title}`}
+                />
+                <CardColumn>
+                  <Title>{book.title}</Title>
+                  {book.description ? (
+                    <Collapsible labelId={descId}>
+                      <DescriptionText text={book.description} />
+                    </Collapsible>
+                  ) : (
+                    <EmptyState message="No description" />
+                  )}
+                </CardColumn>
+              </Card>
+            );
+          })}
+        </ul>
+      </div>
+    </section>
   );
 }
 
