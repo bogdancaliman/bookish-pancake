@@ -58,11 +58,11 @@ const useImageFallback = (fallbackUrl: string) => {
 };
 
 const Card = ({ children }: { children: ReactNode }) => {
-  return <li>{children}</li>;
+  return <li className="flex border rounded-lg p-4 mb-4 gap-5">{children}</li>;
 };
 
 const CardColumn = ({ children }: { children: ReactNode }) => {
-  return <div>{children}</div>;
+  return <div className="flex flex-col flex-1 gap-2">{children}</div>;
 };
 
 const CoverImage = ({ src, alt }: { src?: string; alt: string }) => {
@@ -77,12 +77,42 @@ const CoverImage = ({ src, alt }: { src?: string; alt: string }) => {
 };
 
 const Title = ({ children }: { children: ReactNode }) => {
-  return <h3>{children}</h3>;
+  return <h3 className="m-0 text-xl">{children}</h3>;
 };
 
-const DescriptionText = ({ text }: { text: string }) => <p>(text)</p>;
+const DescriptionText = ({ text }: { text: string }) => (
+  <p className="m-0 leading-relaxed text-gray-600">{text}</p>
+);
 
 const EmptyState = ({ message }: { message: string }) => <span>{message}</span>;
+
+const useToggle = (initialState = false) => {
+  const [isOpen, setIsOpen] = useState(initialState);
+  const toogle = () => setIsOpen((prev) => !prev);
+
+  return { isOpen, toogle };
+};
+
+const Collapsible = ({
+  children,
+  labelId,
+}: {
+  children: ReactNode;
+  labelId: string;
+}) => {
+  const { isOpen, toogle } = useToggle();
+
+  if (!children) return null;
+
+  return (
+    <div>
+      <button onClick={toogle} aria-expanded={isOpen} aria-controls={labelId}>
+        {isOpen ? "Hide" : "Show"} Description
+      </button>
+      {isOpen && <div id={labelId}>{children}</div>}
+    </div>
+  );
+};
 
 function App() {
   const { books, addBook } = useBookLibrary(INITIAL_DATA);
@@ -104,7 +134,7 @@ function App() {
               const descId = `desc-${book.id}`;
 
               return (
-                <Card>
+                <Card key={book.id}>
                   <CoverImage
                     src={book.imageUrl}
                     alt={`Cover of ${book.title}`}
@@ -112,7 +142,9 @@ function App() {
                   <CardColumn>
                     <Title>{book.title}</Title>
                     {book.description ? (
-                      <DescriptionText text={book.description} />
+                      <Collapsible labelId={descId}>
+                        <DescriptionText text={book.description} />
+                      </Collapsible>
                     ) : (
                       <EmptyState message="No description" />
                     )}
