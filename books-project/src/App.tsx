@@ -50,6 +50,13 @@ const useBookLibrary = (initalBooks: Book[]) => {
   return { books, addBook };
 };
 
+const useImageFallback = (fallbackUrl: string) => {
+  const [hasError, setHasError] = useState(false);
+  const onError = () => setHasError(true);
+
+  return { hasError, onError };
+};
+
 const Card = ({ children }: { children: ReactNode }) => {
   return <li>{children}</li>;
 };
@@ -57,6 +64,25 @@ const Card = ({ children }: { children: ReactNode }) => {
 const CardColumn = ({ children }: { children: ReactNode }) => {
   return <div>{children}</div>;
 };
+
+const CoverImage = ({ src, alt }: { src?: string; alt: string }) => {
+  const { hasError, onError } = useImageFallback(PLACEHOLDER_IMAGE);
+  const finalSrc = !src || hasError ? PLACEHOLDER_IMAGE : src;
+
+  return (
+    <div>
+      <img src={finalSrc} alt={alt} onError={onError} />
+    </div>
+  );
+};
+
+const Title = ({ children }: { children: ReactNode }) => {
+  return <h3>{children}</h3>;
+};
+
+const DescriptionText = ({ text }: { text: string }) => <p>(text)</p>;
+
+const EmptyState = ({ message }: { message: string }) => <span>{message}</span>;
 
 function App() {
   const { books, addBook } = useBookLibrary(INITIAL_DATA);
@@ -73,15 +99,28 @@ function App() {
           </button>
         </div>
         <div className="flex flex-col gap-4">
-          {books.map((book) => (
-            <div key={book.id}>
-              <h2 className="text-2xl">{book.title}</h2>
-              {book.description && (
-                <p className="text-gray-600">{book.description}</p>
-              )}
-              <img src={book.imageUrl || PLACEHOLDER_IMAGE} alt={book.title} />
-            </div>
-          ))}
+          <ul>
+            {books.map((book) => {
+              const descId = `desc-${book.id}`;
+
+              return (
+                <Card>
+                  <CoverImage
+                    src={book.imageUrl}
+                    alt={`Cover of ${book.title}`}
+                  />
+                  <CardColumn>
+                    <Title>{book.title}</Title>
+                    {book.description ? (
+                      <DescriptionText text={book.description} />
+                    ) : (
+                      <EmptyState message="No description" />
+                    )}
+                  </CardColumn>
+                </Card>
+              );
+            })}
+          </ul>
         </div>
       </section>
     </>
