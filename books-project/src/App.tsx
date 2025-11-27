@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, ReactNode } from "react";
 import "./App.css";
 
 interface Book {
@@ -50,6 +50,14 @@ const useBookLibrary = (initalBooks: Book[]) => {
   return { books, addBook };
 };
 
+const Card = ({ children }: { children: ReactNode }) => {
+  return <li>{children}</li>;
+};
+
+const CardColumn = ({ children }: { children: ReactNode }) => {
+  return <div>{children}</div>;
+};
+
 function App() {
   const { books, addBook } = useBookLibrary(INITIAL_DATA);
 
@@ -57,7 +65,12 @@ function App() {
     <>
       <section className="flex flex-col justify-center items-center">
         <div>
-          <button onClick={addBook}>Add New Book</button>
+          <button
+            onClick={addBook}
+            className="px-4 py-2 bg-blue-600 active:bg-blue-800 hover:bg-blue-700 text-white rounded cursor-pointer text-base"
+          >
+            Add New Book
+          </button>
         </div>
         <div className="flex flex-col gap-4">
           {books.map((book) => (
