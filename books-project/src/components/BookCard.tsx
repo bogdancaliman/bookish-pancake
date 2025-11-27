@@ -44,9 +44,11 @@ const CoverImage = ({ src, alt }: { src?: string; alt: string }) => {
         className="w-[200px] h-[150px] object-cover rounded bg-stone-50"
       />
       {showFallbackMessage && (
-        <span className="text-sm text-red-500 mt-1">
-          Image failed to load - showing placeholder
-        </span>
+        <div className="max-w-[200px]">
+          <span className="text-sm text-red-500 mt-1">
+            Image failed to load - showing placeholder
+          </span>
+        </div>
       )}
     </div>
   );
