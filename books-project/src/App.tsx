@@ -1,75 +1,76 @@
-import { ReactNode } from "react";
+// import { ReactNode } from "react";
 import "./App.css";
-import { PLACEHOLDER_IMAGE, INITIAL_DATA } from "./lib/books";
+import { INITIAL_DATA } from "./lib/books";
 import { useBookLibrary } from "./hooks/useBookLibrary";
-import { useToggle } from "./hooks/useToggle";
-import { useImageFallback } from "./hooks/useImageFallbacl";
+// import { useToggle } from "./hooks/useToggle";
+// import { useImageFallback } from "./hooks/useImageFallbacl";
+import { BookCard } from "./components/BookCard";
 
-const Card = ({ children }: { children: ReactNode }) => {
-  return <li className="flex border rounded-lg p-4 mb-4 gap-5">{children}</li>;
-};
+// const Card = ({ children }: { children: ReactNode }) => {
+//   return <li className="flex border rounded-lg p-4 mb-4 gap-5">{children}</li>;
+// };
 
-const CardColumn = ({ children }: { children: ReactNode }) => {
-  return <div className="flex flex-col flex-1 gap-2">{children}</div>;
-};
+// const CardColumn = ({ children }: { children: ReactNode }) => {
+//   return <div className="flex flex-col flex-1 gap-2">{children}</div>;
+// };
 
-const CoverImage = ({ src, alt }: { src?: string; alt: string }) => {
-  const { hasError, onLoad, onError, showFallbackMessage } = useImageFallback();
-  const finalSrc = !src || hasError ? PLACEHOLDER_IMAGE : src;
+// const CoverImage = ({ src, alt }: { src?: string; alt: string }) => {
+//   const { hasError, onLoad, onError, showFallbackMessage } = useImageFallback();
+//   const finalSrc = !src || hasError ? PLACEHOLDER_IMAGE : src;
 
-  return (
-    <div className="shrink-0">
-      <img
-        src={finalSrc}
-        alt={alt}
-        onLoad={onLoad}
-        onError={onError}
-        className="w-[200px] h-[150px] object-cover rounded bg-stone-50"
-      />
-      {showFallbackMessage && (
-        <span className="text-sm text-red-500 mt-1">
-          Image failed to load - showing placeholder
-        </span>
-      )}
-    </div>
-  );
-};
+//   return (
+//     <div className="shrink-0">
+//       <img
+//         src={finalSrc}
+//         alt={alt}
+//         onLoad={onLoad}
+//         onError={onError}
+//         className="w-[200px] h-[150px] object-cover rounded bg-stone-50"
+//       />
+//       {showFallbackMessage && (
+//         <span className="text-sm text-red-500 mt-1">
+//           Image failed to load - showing placeholder
+//         </span>
+//       )}
+//     </div>
+//   );
+// };
 
-const Title = ({ children }: { children: ReactNode }) => {
-  return <h3 className="m-0 text-xl">{children}</h3>;
-};
+// const Title = ({ children }: { children: ReactNode }) => {
+//   return <h3 className="m-0 text-xl">{children}</h3>;
+// };
 
-const DescriptionText = ({ text }: { text: string }) => (
-  <p className="m-0 leading-relaxed text-gray-600">{text}</p>
-);
+// const DescriptionText = ({ text }: { text: string }) => (
+//   <p className="m-0 leading-relaxed text-gray-600">{text}</p>
+// );
 
-const EmptyState = ({ message }: { message: string }) => <span>{message}</span>;
+// const EmptyState = ({ message }: { message: string }) => <span>{message}</span>;
 
-const Collapsible = ({
-  children,
-  labelId,
-}: {
-  children: ReactNode;
-  labelId: string;
-}) => {
-  const { isOpen, toogle } = useToggle();
+// const Collapsible = ({
+//   children,
+//   labelId,
+// }: {
+//   children: ReactNode;
+//   labelId: string;
+// }) => {
+//   const { isOpen, toogle } = useToggle();
 
-  if (!children) return null;
+//   if (!children) return null;
 
-  return (
-    <div>
-      <button
-        className="flex items-center gap-1 bg-none border-none text-blue-600 p-0 cursor-pointer text-left text-sm "
-        onClick={toogle}
-        aria-expanded={isOpen}
-        aria-controls={labelId}
-      >
-        {isOpen ? "Hide" : "Show"} Description
-      </button>
-      {isOpen && <div id={labelId}>{children}</div>}
-    </div>
-  );
-};
+//   return (
+//     <div>
+//       <button
+//         className="flex items-center gap-1 bg-none border-none text-blue-600 p-0 cursor-pointer text-left text-sm "
+//         onClick={toogle}
+//         aria-expanded={isOpen}
+//         aria-controls={labelId}
+//       >
+//         {isOpen ? "Hide" : "Show"} Description
+//       </button>
+//       {isOpen && <div id={labelId}>{children}</div>}
+//     </div>
+//   );
+// };
 
 function App() {
   const { books, addBook } = useBookLibrary(INITIAL_DATA);
@@ -88,28 +89,9 @@ function App() {
 
       <div className="flex flex-col gap-4">
         <ul>
-          {books.map((book) => {
-            const descId = `desc-${book.id}`;
-
-            return (
-              <Card key={book.id}>
-                <CoverImage
-                  src={book.imageUrl}
-                  alt={`Cover of ${book.title}`}
-                />
-                <CardColumn>
-                  <Title>{book.title}</Title>
-                  {book.description ? (
-                    <Collapsible labelId={descId}>
-                      <DescriptionText text={book.description} />
-                    </Collapsible>
-                  ) : (
-                    <EmptyState message="No description" />
-                  )}
-                </CardColumn>
-              </Card>
-            );
-          })}
+          {books.map((book) => (
+            <BookCard key={book.id} book={book} />
+          ))}
         </ul>
       </div>
     </section>
